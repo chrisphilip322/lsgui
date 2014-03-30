@@ -11,7 +11,7 @@ class GUI:
         self.addURLEntry = Entry(self.win, width=80)
         self.addURLEntry.grid(row=1, column=3,padx=5,pady=5)
 
-        Button(self.win, text='Add URL', command=self.addURLPressed).grid(row=1,column=1,columnspan=2,sticky=EW,padx=5,pady=5)
+        Button(self.win, text='Add Stream', command=self.addURLPressed).grid(row=1,column=1,columnspan=2,sticky=EW,padx=5,pady=5)
 
         Frame(self.win, height=3, bd=1, relief=SUNKEN).grid(row=2,column=1,columnspan=3,sticky=EW,padx=5,pady=5)
         
@@ -24,10 +24,14 @@ class GUI:
             
     def readfile(self):
         global streamList
-        f = open('streamlist.txt','r')
-        contents = f.read()
-        streamList = re.findall('.+',contents)
-        f.close()
+        streamList=[]
+        try:
+            f = open('streamlist.txt','r')
+            contents = f.read()
+            streamList = re.findall('.+',contents)
+            f.close()
+        except:
+            print('No stream list yet, or an error with it')
         return
 
     def addURLPressed(self):
@@ -71,15 +75,19 @@ def readConfigFile():
 
     lsloc = 'C:\\Program Files(x86)\\Livestreamer\\livestreamer.exe'
     quality = 'best'
-    
-    f = open('lsgui.conf','r')
-    config = f.read()
-    config = re.findall('.+',config)
-    for line in config:
-        if len(re.findall('^livestreamer_location_',line)) > 0:
-            lsloc=line[len('livestreamer_location='):]
-        if len(re.findall('^quality=',line)) > 0:
-            quality=line[len('quality='):]
+
+    try:    
+        f = open('lsgui.conf','r')
+        config = f.read()
+        config = re.findall('.+',config)
+        for line in config:
+            if len(re.findall('^livestreamer_location_',line)) > 0:
+                lsloc=line[len('livestreamer_location='):]
+            if len(re.findall('^quality=',line)) > 0:
+                quality=line[len('quality='):]
+        f.close()
+    except:
+        print('No config file, or an error with it')
 
 readConfigFile()
 myWin = Tk()
