@@ -52,7 +52,7 @@ class StreamButtons:
         Label(win,text=self.stream).grid(row=_row,column=3,sticky=W,padx=5,pady=5)
 
     def launch(self):
-        subprocess.call([lsloc,self.stream,quality])
+        subprocess.Popen([lsloc,self.stream,quality,'>nul'],shell=True)
         return
     def delete(self):
         result = messagebox.askquestion("Delete",'Delete '+self.stream+'?')
@@ -81,13 +81,15 @@ def readConfigFile():
         config = f.read()
         config = re.findall('.+',config)
         for line in config:
-            if len(re.findall('^livestreamer_location_',line)) > 0:
+            if len(re.findall('^livestreamer_location=',line)) > 0:
                 lsloc=line[len('livestreamer_location='):]
+                print(lsloc)
             if len(re.findall('^quality=',line)) > 0:
                 quality=line[len('quality='):]
         f.close()
     except:
         print('No config file, or an error with it')
+    print(lsloc)
 
 readConfigFile()
 myWin = Tk()
