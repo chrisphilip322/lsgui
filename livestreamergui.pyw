@@ -31,7 +31,7 @@ class GUI:
             streamList = re.findall('.+',contents)
             f.close()
         except:
-            print('No stream list yet, or an error with it')
+            pass#messagebox.showinfo(title='Warning',message='No stream list yet, or an error with it')
         return
 
     def addURLPressed(self):
@@ -52,7 +52,7 @@ class StreamButtons:
         Label(win,text=self.stream).grid(row=_row,column=3,sticky=W,padx=5,pady=5)
 
     def launch(self):
-        subprocess.Popen([lsloc,self.stream,quality,'>nul'],shell=True)
+        subprocess.Popen([lsloc,self.stream,quality,'>>log.out','2>>&1'],shell=True)
         return
     def delete(self):
         result = messagebox.askquestion("Delete",'Delete '+self.stream+'?')
@@ -83,13 +83,18 @@ def readConfigFile():
         for line in config:
             if len(re.findall('^livestreamer_location=',line)) > 0:
                 lsloc=line[len('livestreamer_location='):]
-                print(lsloc)
+                #print(lsloc)
             if len(re.findall('^quality=',line)) > 0:
                 quality=line[len('quality='):]
         f.close()
     except:
-        print('No config file, or an error with it')
-    print(lsloc)
+        pass#messagebox.showinfo(title='Warning',message='No config file, or an error with it')
+    try:
+        f = open('log.out','a')
+        f.write('\n----- NEW INSTANCE -----\n\n')
+        f.close()
+    except:
+        pass
 
 readConfigFile()
 myWin = Tk()
