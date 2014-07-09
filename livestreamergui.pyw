@@ -52,7 +52,10 @@ class StreamButtons:
         Label(win,text=self.stream).grid(row=_row,column=3,sticky=W,padx=5,pady=5)
 
     def launch(self):
-        subprocess.Popen([lsloc,self.stream,quality,'>>log.out','2>>&1'],shell=True)
+        if LOGGING:
+            subprocess.Popen([lsloc,self.stream,quality,'>>log.out','2>>&1'],shell=True)
+        else:
+            subprocess.Popen([lsloc,self.stream,quality],shell=True)
         return
     def delete(self):
         result = messagebox.askquestion("Delete",'Delete '+self.stream+'?')
@@ -71,10 +74,11 @@ def writeFileBack():
     return
 
 def readConfigFile():
-    global lsloc, quality
+    global lsloc, quality, LOGGING
 
     lsloc = 'C:\\Program Files(x86)\\Livestreamer\\livestreamer.exe'
     quality = 'best'
+    LOGGING = False
 
     try:    
         f = open('lsgui.conf','r')
@@ -85,7 +89,9 @@ def readConfigFile():
                 lsloc=line[len('livestreamer_location='):]
                 #print(lsloc)
             if len(re.findall('^quality=',line)) > 0:
-                quality=line[len('quality='):]
+                quality = line[len('quality='):]
+            if len(re.findall('^logging=',line)) > 0:
+                LOGGING = line[len('quality='):]=='ON'
         f.close()
     except:
         pass#messagebox.showinfo(title='Warning',message='No config file, or an error with it')
@@ -96,9 +102,11 @@ def readConfigFile():
     except:
         pass
 
-readConfigFile()
-myWin = Tk()
-myObj = GUI(myWin)
-myWin.wm_title('Livestreamer GUI')
+if __name__ == '__main__':
+    readConfigFile()
+    myWin = Tk()
+    myObj = GUI(myWin)
+    myWin.wm_title('Livestreamer GUI')
+    print('Starting program!!')
 
-myWin.mainloop()
+    myWin.mainloop()

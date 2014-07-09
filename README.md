@@ -21,6 +21,8 @@ livestreamer_location   is the location on the system of you livestreamer
 
 quality                 is the quality of streams launched with the gui
 
+logging					ON for logging, OFF for no logging. Default is no logging and logging may break some features.
+
 ---
 
 Building to executable
