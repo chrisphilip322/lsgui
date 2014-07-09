@@ -97,11 +97,15 @@ def readConfigFile():
         pass#messagebox.showinfo(title='Warning',message='No config file, or an error with it')
     try:
         f = open('log.out','a')
-        f.write('\n----- NEW INSTANCE -----\n\n')
+        f.write('\n----- NEW LOLOLOL INSTANCE -----\n\n')
         f.close()
     except:
         pass
 
+<<<<<<< HEAD
+=======
+LOGGING = False
+>>>>>>> 3cf44fa0c21e55c3d29347ca7eae27bcac13506a
 if __name__ == '__main__':
     readConfigFile()
     myWin = Tk()
