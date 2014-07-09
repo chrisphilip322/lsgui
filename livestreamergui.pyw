@@ -52,7 +52,10 @@ class StreamButtons:
         Label(win,text=self.stream).grid(row=_row,column=3,sticky=W,padx=5,pady=5)
 
     def launch(self):
-        subprocess.Popen([lsloc,self.stream,quality,'>>log.out','2>>&1'],shell=True)
+        if LOGGING:
+            subprocess.Popen([lsloc,self.stream,quality,'>>log.out','2>>&1'],shell=True)
+        else:
+            subprocess.Popen([lsloc,self.stream,quality],shell=True)
         return
     def delete(self):
         result = messagebox.askquestion("Delete",'Delete '+self.stream+'?')
@@ -91,14 +94,17 @@ def readConfigFile():
         pass#messagebox.showinfo(title='Warning',message='No config file, or an error with it')
     try:
         f = open('log.out','a')
-        f.write('\n----- NEW INSTANCE -----\n\n')
+        f.write('\n----- NEW LOLOLOL INSTANCE -----\n\n')
         f.close()
     except:
         pass
 
-readConfigFile()
-myWin = Tk()
-myObj = GUI(myWin)
-myWin.wm_title('Livestreamer GUI')
+LOGGING = False
+if __name__ == '__main__':
+    readConfigFile()
+    myWin = Tk()
+    myObj = GUI(myWin)
+    myWin.wm_title('Livestreamer GUI')
+    print('Starting program!!')
 
-myWin.mainloop()
+    myWin.mainloop()
